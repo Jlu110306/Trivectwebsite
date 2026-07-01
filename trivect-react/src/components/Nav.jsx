@@ -65,6 +65,7 @@ export default function Nav() {
               {dropdownOpen && (
                 <div className="nav-dropdown open">
                   <Link to="/accounts" onClick={() => setDropdownOpen(false)}>My Account</Link>
+                  <Link to="/profile" onClick={() => setDropdownOpen(false)}>Edit Profile</Link>
                   <Link to="/accounts" onClick={() => setDropdownOpen(false)}>Orders</Link>
                   <div className="drop-divider"></div>
                   <button className="drop-signout" onClick={() => { logout(); setDropdownOpen(false); }}>Sign Out</button>
@@ -72,19 +73,12 @@ export default function Nav() {
               )}
             </span>
           ) : (
-            <Link to="/shop" className="nav-cta">Shop Now</Link>
-          )}
-        </span>
-        <span id="nav-profile-slot">
-          {user ? (
-            <Link to="/profile" className="nav-profile-btn has-avatar" title="Profile">
-              <img src={user.avatar_url || '/images/logo.png'} alt={nick}
-                   onError={(e) => { e.target.style.display = 'none'; e.target.parentNode.innerHTML = PROFILE_ICON; e.target.parentNode.classList.remove('has-avatar'); }} />
-            </Link>
-          ) : (
-            <Link to="/accounts" className="nav-profile-btn" title="Sign In / My Account">
-              {PROFILE_ICON}
-            </Link>
+            <>
+              <Link to="/shop" className="nav-cta">Shop Now</Link>
+              <Link to="/accounts" className="nav-profile-btn" title="Sign In / My Account">
+                {PROFILE_ICON}
+              </Link>
+            </>
           )}
         </span>
         <div className="hamburger" onClick={() => setMobileOpen(!mobileOpen)} role="button" tabIndex={0}>
