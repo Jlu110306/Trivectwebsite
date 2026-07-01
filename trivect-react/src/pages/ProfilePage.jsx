@@ -37,7 +37,13 @@ export default function ProfilePage() {
       // Only seed avatarUrl from user when we don't already have one set locally.
       // (After an upload we set it with a cache-buster; we don't want to overwrite that
       // with the stale URL from user.avatar_url on the next effect run.)
-      setAvatarUrl(prev => prev || user.avatar_url || '');
+      // Always append a cache-buster so the browser can't serve a stale cached image
+      // (it might have cached the old/empty 1x1 avatar from before this user's fix).
+      setAvatarUrl(prev => {
+        if (prev) return prev;
+        if (!user.avatar_url) return '';
+        return user.avatar_url + '?t=' + Date.now();
+      });
     }
   }, [user, loading, navigate]);
 
@@ -87,13 +93,25 @@ export default function ProfilePage() {
     setUploading(true);
     setAvatarMsg('');
     try {
+      // Stage 1: render the cropped image to a 320x320 canvas using the SAME
+      // math the live preview uses (5-arg drawImage, cropOffset is the
+      // destination position, scale is the user-controlled zoom).
+      const stage = document.createElement('canvas');
+      stage.width = 320; stage.height = 320;
+      const sctx = stage.getContext('2d');
+      sctx.fillStyle = '#1a1a1a';
+      sctx.fillRect(0, 0, 320, 320);
+      sctx.drawImage(cropImage, cropOffset.x, cropOffset.y,
+                     cropImage.width * cropScale,
+                     cropImage.height * cropScale);
+      // Stage 2: scale the 320x320 stage to 256x256 with a circular clip.
       const outCanvas = document.createElement('canvas');
       outCanvas.width = 256; outCanvas.height = 256;
       const octx = outCanvas.getContext('2d');
       octx.fillStyle = '#1a1a1a';
       octx.fillRect(0, 0, 256, 256);
       octx.beginPath(); octx.arc(128, 128, 128, 0, Math.PI * 2); octx.clip();
-      octx.drawImage(cropImage, cropOffset.x, cropOffset.y, cropImage.width * cropScale, cropImage.height * cropScale, 0, 0, 256, 256);
+      octx.drawImage(stage, 0, 0, 320, 320, 0, 0, 256, 256);
       const dataUrl = outCanvas.toDataURL('image/jpeg', 0.9);
       const { ok, data, error } = await uploadAvatar(dataUrl);
       if (ok) {
@@ -216,7 +234,6 @@ export default function ProfilePage() {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              onClick={e => { e.target.value = ''; }}
             />
           </div>
 
@@ -320,9 +337,9 @@ export default function ProfilePage() {
         .save-btn:disabled { opacity:0.5; }
 
         .crop-modal { display:flex; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.92); flex-direction:column; align-items:center; justify-content:center; padding:24px; }
-        .crop-frame { position:relative; padding:6px; border-radius:50%; box-shadow:0 0 0 3px var(--red), 0 0 0 5px rgba(204,0,0,0.25); }
+        .crop-frame { position:relative; padding:6px; border-radius:50%; box-shadow:0 0 0 3px var(--red), 0 0 0 5px rgba(204,0,0,0.25), 0 0 20px rgba(204,0,0,0.15); }
         .crop-container { position:relative; width:320px; height:320px; overflow:hidden; border-radius:50%; background:#1a1a1a; }
-        .crop-mask { position:absolute; inset:0; border-radius:50%; box-shadow:inset 0 0 0 2px rgba(255,255,255,0.6); pointer-events:none; }
+        .crop-mask { position:absolute; inset:0; border-radius:50%; box-shadow:inset 0 0 0 3px rgba(255,255,255,0.9); pointer-events:none; }
         .crop-controls { margin-top:24px; display:flex; align-items:center; gap:20px; }
         .crop-controls label { font-size:0.68rem; color:var(--silver-dark); letter-spacing:2px; text-transform:uppercase; }
         .crop-controls input[type="range"] { width:200px; accent-color:var(--red); }

@@ -29,8 +29,8 @@ export default function AccountsPage() {
   const [pfPhoneCN, setPfPhoneCN] = useState('');
   const [pfPassword, setPfPassword] = useState('');
   const [saveMsg, setSaveMsg] = useState('');
-
-  // Avatar crop
+  const [saveMsgColor, setSaveMsgColor] = useState('#80ff80');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const [cropModalActive, setCropModalActive] = useState(false);
   const [cropImage, setCropImage] = useState(null);
   const [cropScale, setCropScale] = useState(1);
@@ -47,6 +47,7 @@ export default function AccountsPage() {
       setPfEmail(user.email || '');
       setPfPhoneUK(user.phone_uk || '');
       setPfPhoneCN(user.phone_cn || '');
+      setAvatarUrl(prev => prev || user.avatar_url || '');
     }
   }, [user]);
 
@@ -80,8 +81,6 @@ export default function AccountsPage() {
     if (ok) setPfPassword('');
   };
 
-  const [saveMsgColor, setSaveMsgColor] = useState('#80ff80');
-
   const redrawCrop = () => {
     const canvas = cropCanvasRef.current;
     if (!canvas || !cropImage) return;
@@ -104,15 +103,33 @@ export default function AccountsPage() {
   const handleCropSave = async () => {
     if (!cropImage) return;
     const outSize = 256;
+    // Stage 1: render the crop to a 320x320 canvas using the live-preview math.
+    const stage = document.createElement('canvas');
+    stage.width = 320; stage.height = 320;
+    const sctx = stage.getContext('2d');
+    sctx.fillStyle = '#1a1a1a';
+    sctx.fillRect(0, 0, 320, 320);
+    sctx.drawImage(cropImage, cropOffset.x, cropOffset.y,
+                   cropImage.width * cropScale,
+                   cropImage.height * cropScale);
+    // Stage 2: scale the stage into the 256x256 circular output.
     const outCanvas = document.createElement('canvas');
     outCanvas.width = outSize; outCanvas.height = outSize;
     const octx = outCanvas.getContext('2d');
+    octx.fillStyle = '#1a1a1a';
+    octx.fillRect(0, 0, outSize, outSize);
     octx.beginPath();
     octx.arc(outSize / 2, outSize / 2, outSize / 2, 0, Math.PI * 2);
     octx.clip();
-    octx.drawImage(cropImage, cropOffset.x, cropOffset.y, cropImage.width * cropScale, cropImage.height * cropScale, 0, 0, outSize, outSize);
-    const { ok } = await uploadAvatar(outCanvas.toDataURL('image/jpeg', 0.9));
-    if (ok) { setSaveMsg('✓ Photo updated.'); setSaveMsgColor('#80ff80'); setTimeout(() => setSaveMsg(''), 3000); }
+    octx.drawImage(stage, 0, 0, 320, 320, 0, 0, outSize, outSize);
+    const { ok, data } = await uploadAvatar(outCanvas.toDataURL('image/jpeg', 0.9));
+    if (ok) {
+      const newUrl = data?.user?.avatar_url || '';
+      setAvatarUrl(newUrl ? newUrl + '?t=' + Date.now() : '');
+      setSaveMsg('✓ Photo updated.'); setSaveMsgColor('#80ff80'); setTimeout(() => setSaveMsg(''), 3000);
+    } else {
+      setSaveMsg('✗ Upload failed.'); setSaveMsgColor('#e60000'); setTimeout(() => setSaveMsg(''), 3000);
+    }
     setCropModalActive(false);
   };
 
@@ -127,7 +144,7 @@ export default function AccountsPage() {
   if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--silver-dark)' }}>Loading...</div>;
 
   if (user) {
-    const avatarSrc = user.avatar_url || '';
+    const avatarSrc = avatarUrl || user.avatar_url || '';
     const initial = (user.nickname || user.name || '?').charAt(0).toUpperCase();
 
     return (
@@ -137,7 +154,11 @@ export default function AccountsPage() {
           <div className="dashboard-grid">
             <div className="account-sidebar">
               <div className="account-profile-block">
-                <div className="account-avatar" id="avatarInitial">{initial}</div>
+                {avatarSrc ? (
+                  <img src={avatarSrc} alt={user.name} style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', margin: '0 auto 12px', display: 'block', border: '2px solid var(--red)' }} />
+                ) : (
+                  <div className="account-avatar" id="avatarInitial">{initial}</div>
+                )}
                 <div className="account-name">{user.name}</div>
                 <div className="account-email">{user.email}</div>
               </div>
@@ -233,7 +254,7 @@ export default function AccountsPage() {
                 onMouseUp={() => dragRef.current.dragging = false}
                 onTouchEnd={() => dragRef.current.dragging = false}
               />
-              <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', boxShadow: '0 0 0 9999px rgba(0,0,0,0.65)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', boxShadow: '0 0 0 9999px rgba(0,0,0,0.65), inset 0 0 0 3px rgba(255,255,255,0.9)', pointerEvents: 'none' }} />
             </div>
             <div style={{ marginTop: 20 }}>
               <input type="range" min="50" max="200" value={cropScale * 100} onChange={e => setCropScale(parseInt(e.target.value) / 100)} style={{ width: 260, accentColor: 'var(--red)' }} />

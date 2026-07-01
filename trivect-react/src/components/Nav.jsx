@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Nav.css';
@@ -13,6 +13,13 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [navBg, setNavBg] = useState(false);
+  // Cache-bust the avatar image so the browser never serves a stale cached file
+  // (e.g. the old broken 1x1 image from before the crop bug was fixed).
+  // Recomputed only when the user object changes (login/logout/avatar update).
+  const avatarSrc = useMemo(
+    () => (user?.avatar_url ? user.avatar_url + '?v=' + Date.now() : '/images/logo.png'),
+    [user]
+  );
   const dropdownRef = useRef(null);
 
   const currentPage = location.pathname === '/' ? 'index' : location.pathname.replace('/', '').split('/')[0];
@@ -59,7 +66,7 @@ export default function Nav() {
         <span id="nav-user-slot">
           {user ? (
             <span className="nav-avatar-btn" ref={dropdownRef} onClick={(e) => { e.stopPropagation(); setDropdownOpen(!dropdownOpen); }}>
-              <img className="nav-avatar-img" src={user.avatar_url || '/images/logo.png'}
+              <img className="nav-avatar-img" src={avatarSrc}
                    alt={nick} onError={(e) => e.target.src = '/images/logo.png'} />
               <span className="nav-avatar-nick">{nick}</span>
               {dropdownOpen && (

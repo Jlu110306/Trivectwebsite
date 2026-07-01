@@ -50,8 +50,8 @@ export function AuthProvider({ children }) {
 
   const uploadAvatar = async (imageDataUrl) => {
     const { ok, data } = await api('/avatar', 'POST', { image: imageDataUrl });
-    if (ok) setUser(data.user);
-    return { ok, error: data?.error };
+    if (ok && data?.user) setUser(data.user);
+    return { ok, data, error: data?.error };
   };
 
   return (
