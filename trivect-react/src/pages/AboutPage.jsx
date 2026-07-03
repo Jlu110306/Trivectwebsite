@@ -13,15 +13,8 @@ export default function AboutPage() {
 
       <section style={{ background: 'var(--black)' }}>
         <div className="story-grid">
-          <ScrollReveal><div className="story-img img-placeholder" data-label="Add Team / Workshop Image">
-            <svg width="200" height="160" viewBox="0 0 200 160" fill="none">
-              <rect x="10" y="20" width="180" height="120" stroke="rgba(192,192,192,0.15)" strokeWidth="1" fill="none"/>
-              <rect x="30" y="40" width="60" height="80" stroke="rgba(204,0,0,0.3)" strokeWidth="1.5" fill="none"/>
-              <rect x="110" y="40" width="60" height="50" stroke="rgba(192,192,192,0.2)" strokeWidth="1" fill="none"/>
-              <line x1="30" y1="80" x2="90" y2="80" stroke="rgba(192,192,192,0.1)" strokeWidth="1"/>
-              <circle cx="140" cy="105" r="15" stroke="rgba(204,0,0,0.2)" strokeWidth="1" fill="none"/>
-              <text x="100" y="150" textAnchor="middle" fill="rgba(192,192,192,0.2)" fontSize="9" fontFamily="sans-serif" letterSpacing="2">ADD WORKSHOP IMAGE</text>
-            </svg>
+          <ScrollReveal><div className="story-img">
+            <img src="/images/Other/Hex%20Lamp.png" alt="Hex Lamp — 3D printed by Trivect Aerospace" />
           </div></ScrollReveal>
           <ScrollReveal><div className="story-text">
             <span className="section-label">Our Story</span>
@@ -132,10 +125,15 @@ export default function AboutPage() {
       </section>
 
       <style>{`
-        .story-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; margin-bottom:80px; }
-        .story-img { aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; }
+        .story-grid { display:grid; grid-template-columns:5fr 6fr; gap:64px; align-items:center; margin-bottom:80px; }
+        /* Portrait image (Hex Lamp) on the left. Cap height to match the
+           text column and use object-fit:contain so the tall photo isn't
+           cropped. */
+        .story-img { display:flex; align-items:center; justify-content:center; max-height:560px; overflow:hidden; }
+        .story-img img { display:block; max-width:100%; max-height:560px; width:auto; height:auto; object-fit:contain; }
         .story-img svg { position: absolute; }
-        .story-text p { color:var(--silver-dark); line-height:1.9; margin-bottom:18px; font-size:0.95rem; }
+        .story-text { display:flex; flex-direction:column; justify-content:center; }
+        .story-text p { color:var(--silver-dark); line-height:1.85; margin-bottom:16px; font-size:0.92rem; }
         .mv-grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-bottom:80px; }
         .mv-card { padding:36px 32px; background:var(--dark3); position:relative; overflow:hidden; }
         .mv-card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:var(--red); }
