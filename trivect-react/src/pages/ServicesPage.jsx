@@ -64,7 +64,7 @@ export default function ServicesPage() {
 
       <section style={{ background: 'var(--black)' }}>
         <div className="services-intro">
-          <div className="intro-text reveal">
+          <div className="intro-text">
             <span className="section-label">What We Do</span>
             <h2 className="section-title">Three Services.<br/><span style={{ color: 'var(--red)' }}>End-to-End</span> Capability.</h2>
             <div className="divider-line"></div>
@@ -77,10 +77,10 @@ export default function ServicesPage() {
       {services.map(svc => (
         <section id={svc.id} key={svc.id} className="service-section">
           <div className="service-inner">
-            <div className="service-visual reveal">
+            <div className="service-visual">
               <div className="service-icon-wrap">{svc.icon}</div>
             </div>
-            <div className="service-content reveal">
+            <div className="service-content">
               <span className="section-label">{svc.num}</span>
               <h2>{svc.title}</h2>
               <div className="divider-line"></div>
@@ -98,7 +98,7 @@ export default function ServicesPage() {
         </section>
       ))}
 
-      <section style={{ background: 'var(--black)', textAlign: 'center' }} className="reveal">
+      <section style={{ background: 'var(--black)', textAlign: 'center' }}>
         <span className="section-label" style={{ display: 'block', marginBottom: 16 }}>Ready to Start</span>
         <h2 className="section-title">Need Something <span style={{ color: 'var(--red)' }}>Custom?</span></h2>
         <p style={{ color: 'var(--silver-dark)', maxWidth: 500, margin: '0 auto 36px', lineHeight: 1.8 }}>Every project is different. Tell us what you're building and we'll put together a tailored service package that fits your requirements.</p>
