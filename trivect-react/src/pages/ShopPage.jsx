@@ -7,7 +7,7 @@ import { useCart } from '../context/CartContext';
 const products = [
   { id: '1', cat: 'stationery storage', name: 'Paper+', price: 24.99, badge: 'New', image: '/images/product-paper-plus.jpg',
     catLabel: 'Stationery / 3D Printed', desc: 'Honeycomb-textured tissue box holder with "Trivect Aerospace Official" branding. Precision 3D printed in matte black.' },
-  { id: '2', cat: 'stationery', name: 'Pen+', price: 18.99, badge: 'New', image: '/images/product-pen-plus.jpg',
+  { id: '2', cat: 'stationery', name: 'Pen+', price: 18.99, badge: 'New', image: '/images/Front%20page%20six%20image/Pen%20Lid.png',
     catLabel: 'Stationery / 3D Printed', desc: 'Aerodynamic 3D printed pen with matte black body and red "Trivect Aerospace" embossed cap.' },
   { id: '3', cat: 'stationery storage', name: 'Paper Squared+', price: 29.99, badge: 'New', image: '/images/product-paper-squared.jpg',
     catLabel: 'Stationery / 3D Printed', desc: 'Finned cylindrical paper / sticky-note holder with "Trivect Aerospace" engraved branding.' },

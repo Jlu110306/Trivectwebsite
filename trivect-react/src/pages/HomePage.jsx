@@ -4,6 +4,17 @@ import ScrollReveal from '../components/ScrollReveal';
 
 const SLIDE_COUNT = 6;
 
+// Hero slider images — one entry per slide. null = keep the placeholder.
+// Filenames with spaces are URL-encoded (%20) so the browser requests them correctly.
+const SLIDE_IMAGES = [
+  '/images/Front%20page%20six%20image/IMG_6939.jpeg',
+  '/images/Front%20page%20six%20image/Pasted%20Graphic.png',
+  '/images/Front%20page%20six%20image/Pen%20Lid.png',         // Pen+ product, also used in ShopPage
+  '/images/Front%20page%20six%20image/Streamline%20Aerodynamics%20-Made%20to%20LIFT%20OFF!%20(1).png',
+  '/images/Front%20page%20six%20image/image.png',
+  null,                                                        // 6th slot — coming soon
+];
+
 export default function HomePage() {
   const [current, setCurrent] = useState(0);
   const timerRef = useRef(null);
@@ -125,14 +136,20 @@ export default function HomePage() {
             const diff = touchStartX.current - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
           }}>
-          {Array.from({ length: SLIDE_COUNT }).map((_, i) => (
-            <div className="slide" key={i} data-slide={i + 1}>
-              <div className="slide-placeholder">
-                <div className="slide-placeholder-grid"></div>
-                <div className="slide-placeholder-label">Slide {i + 1} — images/slide{i + 1}.jpg</div>
+          {Array.from({ length: SLIDE_COUNT }).map((_, i) => {
+            const slideImg = SLIDE_IMAGES[i];
+            return (
+              <div className="slide" key={i} data-slide={i + 1}
+                   style={slideImg ? { backgroundImage: `url(${slideImg})` } : undefined}>
+                {!slideImg && (
+                  <div className="slide-placeholder">
+                    <div className="slide-placeholder-grid"></div>
+                    <div className="slide-placeholder-label">Slide {i + 1} — coming soon</div>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="hero-overlay">
