@@ -20,12 +20,9 @@ export default function Footer() {
         <div>
           <div className="footer-col-title">Services</div>
           <ul className="footer-links">
-            <li><Link to="/services#aerospace">Aerospace Engineering</Link></li>
-            <li><Link to="/services#modelling">3D Modelling</Link></li>
-            <li><Link to="/services#printing">3D Printing</Link></li>
+            <li><Link to="/services#aerospace">Aerospace &amp; Custom Drones</Link></li>
+            <li><Link to="/services#modelling">Custom 3D Models</Link></li>
             <li><Link to="/services#electronics">Electronics Design</Link></li>
-            <li><Link to="/services#drones">Drone Development</Link></li>
-            <li><Link to="/services#rocketry">Model Rocketry</Link></li>
           </ul>
         </div>
         <div>

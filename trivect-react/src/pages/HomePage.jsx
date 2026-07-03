@@ -202,12 +202,9 @@ export default function HomePage() {
         </div>
         <div className="home-services-grid">
           {[
-            { num: '01', title: 'Aerospace Engineering', desc: 'Drone development, model rocketry, aerodynamics research, and flight systems.', to: '/services#aerospace' },
-            { num: '02', title: '3D Modelling', desc: 'Professional CAD design for aerospace, robotics, and engineering projects.', to: '/services#modelling' },
-            { num: '03', title: '3D Printing', desc: 'Rapid prototyping and custom manufacturing of engineering components.', to: '/services#printing' },
-            { num: '04', title: 'Electronics Design', desc: 'PCB design, sensor integration, flight controllers, and embedded systems.', to: '/services#electronics' },
-            { num: '05', title: 'Drone Development', desc: 'Custom airframes, flight controller integration, and autonomous systems.', to: '/services#drones' },
-            { num: '06', title: 'Model Rocketry', desc: 'Aerodynamic design, structural modelling, recovery systems, and flight testing.', to: '/services#rocketry' },
+            { num: '01', title: 'Aerospace & Custom Drones', desc: 'Aerodynamic studies, custom airframe design, flight controller integration, and flight-tested drone systems.', to: '/services#aerospace' },
+            { num: '02', title: 'Custom 3D Models', desc: 'Production-ready CAD models optimised for 3D printing, CNC machining, and assembly — plus physical prototyping.', to: '/services#modelling' },
+            { num: '03', title: 'Electronics Design', desc: 'PCB schematic and layout, multi-layer boards, embedded firmware, and fully assembled tested boards.', to: '/services#electronics' },
           ].map(s => (
             <ScrollReveal key={s.num}><div className="svc-card">
               <span className="svc-num">{s.num}</span>
