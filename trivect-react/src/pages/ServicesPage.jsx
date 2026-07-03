@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import PageHero from '../components/PageHero';
 import ScrollReveal from '../components/ScrollReveal';
+import QuoteModal from '../components/QuoteModal';
 import { Link } from 'react-router-dom';
 
 const services = [
@@ -50,6 +52,8 @@ const services = [
 ];
 
 export default function ServicesPage() {
+  const [quoteFor, setQuoteFor] = useState(null); // service title or null
+
   return (
     <div className="page-body">
       <PageHero
@@ -85,7 +89,9 @@ export default function ServicesPage() {
                 {svc.bullets.map((b, i) => <li key={i}>{b}</li>)}
               </ul>
               <div className="service-cta">
-                <Link to="/contact" className="btn-primary">Send Info &amp; Get a Quote →</Link>
+                <button type="button" className="btn-primary" onClick={() => setQuoteFor(svc.title)}>
+                  Send Info &amp; Get a Quote →
+                </button>
               </div>
             </div>
           </div>
@@ -135,6 +141,12 @@ export default function ServicesPage() {
           .service-list { grid-template-columns:1fr; }
         }
       `}</style>
+
+      <QuoteModal
+        open={quoteFor !== null}
+        service={quoteFor || ''}
+        onClose={() => setQuoteFor(null)}
+      />
     </div>
   );
 }

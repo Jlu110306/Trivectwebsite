@@ -13,6 +13,8 @@ import ContactPage from './pages/ContactPage';
 import AccountsPage from './pages/AccountsPage';
 import ProfilePage from './pages/ProfilePage';
 import RocketGamePage from './pages/RocketGamePage';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 
 export default function App() {
   return (
@@ -20,12 +22,22 @@ export default function App() {
       <AuthProvider>
         <CartProvider>
           <Routes>
+            <Route path="/admin/*" element={<AdminRoutes />} />
             <Route path="/rocket-game" element={<RocketGamePage />} />
             <Route path="*" element={<AppLayout />} />
           </Routes>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>
+  );
+}
+
+function AdminRoutes() {
+  return (
+    <Routes>
+      <Route path="" element={<AdminLogin />} />
+      <Route path="dashboard" element={<AdminDashboard />} />
+    </Routes>
   );
 }
 

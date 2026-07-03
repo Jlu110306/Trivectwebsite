@@ -1,0 +1,18 @@
+{
+  "name": "trivect-quote-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quote/information submission + admin dashboard backend for Trivect Aerospace",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
