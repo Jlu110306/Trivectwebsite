@@ -13,6 +13,7 @@ import ContactPage from './pages/ContactPage';
 import AccountsPage from './pages/AccountsPage';
 import ProfilePage from './pages/ProfilePage';
 import RocketGamePage from './pages/RocketGamePage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 
@@ -55,6 +56,7 @@ function AppLayout() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/accounts" element={<AccountsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
       </Routes>
       <Footer />
     </>

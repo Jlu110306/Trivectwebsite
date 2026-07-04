@@ -7,8 +7,13 @@ footer {
 }
 .footer-brand p {
   font-size: 0.85rem; color: var(--silver-dark); line-height: 1.8;
-  margin: 16px 0 24px; max-width: 280px;
+  margin: 12px 0 24px; max-width: 280px;
 }
+.footer-tagline {
+  font-size: 0.72rem; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--silver-dark); margin-top: 8px; font-weight: 600;
+}
+.footer-tagline-accent { color: var(--red); }
 .footer-col-title {
   font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase;
   color: var(--white); margin-bottom: 20px;
